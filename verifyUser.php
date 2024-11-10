@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = filter_input(INPUT_POST, "userInputEmail1", FILTER_SANITIZE_SPECIAL_CHARS);
     $password = filter_input(INPUT_POST, "userInputPassword1", FILTER_SANITIZE_SPECIAL_CHARS);
 
-    $sql = "SELECT * FROM USER WHERE email = '$username'";
+    $sql = "SELECT * FROM users WHERE email = '$username'";
 
 
 
@@ -23,36 +23,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       if (password_verify($password, $row["password"])) {
 
-        $_SESSION["email"] = $username;
-        $_SESSION["first_name"] = $row["first_name"];
-        $_SESSION["last_name"] = $row["last_name"];
-        $_SESSION["member_since"] = $row["member_since"];
-        $_SESSION["total_reviews"] = $row["total_reviews"];
         $_SESSION["user_id"] = $row["user_id"];
-
-        header("Location: home.php");
+        $_SESSION["username"] = $row["username"];
+        $_SESSION["email"] = $row["email"];
+        $_SESSION["member_since"] = $row["member_since"];
+        header("Location: index.php");
         exit();
       } else {
         $_SESSION["error-code"] = "Wrong password";
       }
     } else {
       // echo "User not found in the database";
-      $_SESSION["email"] = null;
-      $_SESSION["first_name"] = null;
-      $_SESSION["last_name"] = null;
-      $_SESSION["member_since"] = null;
-      $_SESSION["total_reviews"] = null;
       $_SESSION["user_id"] = null;
+      $_SESSION["email"] = null;
+      $_SESSION["username"] = null;
+      $_SESSION["email"] = null;
+      $_SESSION["member_since"] = null;
       $_SESSION["error_code"] = "User not found in the database"; //1 means user not found in the database
       exit();
     }
   } else {
-    $_SESSION["email"] = null;
-    $_SESSION["first_name"] = null;
-    $_SESSION["last_name"] = null;
-    $_SESSION["member_since"] = null;
-    $_SESSION["total_reviews"] = null;
     $_SESSION["user_id"] = null;
+    $_SESSION["email"] = null;
+      $_SESSION["username"] = null;
+      $_SESSION["email"] = null;
+      $_SESSION["member_since"] = null;
     $_SESSION["error_code"] = "Username or password cannot be empty";
     //2 means Username or password cannot be null
 
