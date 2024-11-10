@@ -32,71 +32,84 @@ session_start();
     integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
     crossorigin="anonymous"></script>
   <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+  <style>
+    .navbar-nav {
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-item {
+      margin-right: 20px; 
+    }
+
+  </style>
 </head>
 
 <body class="bg-dark">
-  <header>
-    <!-- navigation bar start -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
-      <div class="nav flex-row justify-content-center align-items-center">
-        <div class="col-1 m-3">
-          <!--Logo-->
-          <a class="navbar-brand" href="home.php">
-            <img class="d-inline-block align-top d-flex" height="50" width="50"
-              src="assets/cinemarvel_icons/cinemarvel_logo.png" alt="Logo">
-          </a>
-        </div>
-        <div class="col-7">
-          <!-- Search -->
-          <form class="d-flex justify-content-between">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search">
-              <button type="button" class="btn btn-danger "><i class="fa fa-search"></i></button>
-            </div>
-            <div class="col-2">
-              <!-- If a user is signed in display their username instead of the sign in option -->
-
-              <?php if (isset($_SESSION["username"])): ?>
-                <span class="link-light">Welcome, <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
-                <a href="cinemarvel_logout.php" class="link-light ms-3">Logout</a>
-              <?php else: ?>
-                <a href="cinemarvel_login.php" class="link-light">Sign In</a>
-              <?php endif; ?>
-              
-            </div>
-            <div class="col-2">
-              <a href="cinemarvel_profile.html">
-                <img class="rounded-circle ms-3" src="assets/cinemarvel_icons/navigation/icons8-test-account-96.png"
-                  width="45" height="45" alt="profile icon">
-                </img>
-              </a>
-            </div>
-
-          </form>
-        </div>
-        <ul class="row">
-          <li class="nav flex-row justify-content-center align-items-center">
-            <ul class="nav">
-              <li class="nav-item">
-                <a class="nav-link" href="cinemarvel_main.html">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="cinemarvel_browse.html">Browse</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="cinemarvel_new_releases.html">New Releases</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="cinemarvel_about.html">About Us</a>
-              </li>
-            </ul>
-        </ul>
+<header>
+    <!-- Navigation bar start -->
+    <nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <div class="row w-100">
+      <!-- Logo -->
+      <div class="col-3 d-flex align-items-center">
+        <a class="navbar-brand" href="home.php">
+          <img class="d-inline-block align-top" height="50" width="50" src="assets/cinemarvel_icons/cinemarvel_logo.png" alt="Logo">
+        </a>
       </div>
-    </nav>
-  </header>
+
+      <!-- Search Bar -->
+      <div class="col-6 d-flex justify-content-center align-items-center">
+        <form class="d-flex w-100" method="GET" action="search_results.php">
+          <div class="input-group">
+            <input type="text" class="form-control" name="search" placeholder="Search for movies..." aria-label="Search">
+            <button class="btn btn-danger" type="submit">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Sign In and Profile -->
+      <div class="col-3 d-flex align-items-center justify-content-end">
+        <!-- If user is signed in their username should appear instead of the sign in button-->
+        <?php if (isset($_SESSION["username"])): ?>
+          <span class="link-light">Welcome, <?php echo htmlspecialchars($_SESSION["username"]); ?></span>
+          <a href="cinemarvel_logout.php" class="link-light ms-3">Logout</a>
+        <?php else: ?>
+          <a href="cinemarvel_login.php" class="link-light">Sign In</a>
+        <?php endif; ?>
+
+        <!-- Profile icon -->
+        <a href="cinemarvel_profile.html">
+          <img class="rounded-circle ms-3" src="assets/cinemarvel_icons/navigation/icons8-test-account-96.png" width="45" height="45" alt="Profile icon">
+        </a>
+      </div>
+    </div>
   </div>
 
-  <!--we'll put Randomized Banners here-->
+  <!-- Page Links -->
+  <div class="row w-100 mt-2">
+    <div class="col-12 d-flex justify-content-center">
+      <ul class="navbar-nav d-flex flex-row justify-content-center w-auto gap-4">
+        <li class="nav-item">
+          <a class="nav-link link-light" href="cinemarvel_home.php">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="cinemarvel_browse.php">Browse</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="cinemarvel_new_releases.php">New Releases</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link link-light" href="cinemarvel_about.php">About Us</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  </header>
   <section class="banner" id="main_banner">
     <!-- Carousel -->
     <div id="demo" class="carousel slide" data-bs-ride="carousel">
@@ -111,15 +124,64 @@ session_start();
       <!-- The slideshow/carousel -->
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img src="assets/movie_banners/deadpool_wolverine_cropped.jpg" alt="Deadpool and Wolverine Banner"
-            class="d-block h-100 w-100">
+        <?php
+          include "database.php";
+          $sql = "SELECT poster_filepath FROM movies ";
+          $result = mysqli_query($conn, $sql);
+
+          $imageURL = array();
+
+          if ($result != null) {
+            while ($row = mysqli_fetch_array($result)) {
+              $imageURL[] = $row["poster_filepath"];
+            }
+
+            $randomURL = $imageURL[array_rand($imageURL)];
+          } else {
+            $randomURL = "ironman.jpg";
+          }
+          ?>
+          <img src="assets/movie_banners/<?php echo $randomURL ?>" alt="Banner URL" class="d-block w-100">
+        </div>
+        <div class="carousel-item" style="max-height: 80%">
+          <?php
+          include "database.php";
+          $sql = "SELECT poster_filepath FROM movies ";
+          $result = mysqli_query($conn, $sql);
+
+          $imageURL = array();
+
+          if ($result) {
+            while ($row = mysqli_fetch_array($result)) {
+              $imageURL[] = $row["poster_filepath"];
+            }
+
+            $randomURL = $imageURL[array_rand($imageURL)];
+          } else {
+            $randomURL = "ironman.jpg";
+          }
+          ?>
+          <img src="assets/movie_banners/<?php echo $randomURL ?>" alt="Banner URL" class="d-block w-100">
         </div>
         <div class="carousel-item">
-          <img src="assets/movie_banners/venom.jpeg" alt="Venom Banner" class="d-block w-100">
-        </div>
-        <div class="carousel-item">
-          <img src="assets/movie_banners/captain_america.jpg" alt="Captain America: A Brave New World Banner"
-            class="d-block w-100">
+        <?php
+          include "database.php";
+          $sql = "SELECT poster_filepath FROM movies ";
+          $result = mysqli_query($conn, $sql);
+
+          $imageURL = array();
+
+          if ($result) {
+            while ($row = mysqli_fetch_array($result)) {
+              $imageURL[] = $row["poster_filepath"];
+            }
+
+            $randomURL = $imageURL[array_rand($imageURL)];
+          } else {
+            $randomURL = "ironman.jpg";
+          }
+          ?>
+          <img src="assets/movie_banners/<?php echo $randomURL ?>" alt="Banner URL" class="d-block w-100">
         </div>
       </div>
 
