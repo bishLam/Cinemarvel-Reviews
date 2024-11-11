@@ -5,7 +5,7 @@
       <div class="row w-100">
         <!-- Logo -->
         <div class="col-3 d-flex align-items-center">
-          <a class="navbar-brand" href="home.php">
+          <a class="navbar-brand" href="index.php">
             <img class="d-inline-block align-top" height="50" width="50"
               src="assets/cinemarvel_icons/cinemarvel_logo.png" alt="Logo">
           </a>
@@ -35,7 +35,7 @@
           <?php endif; ?>
 
           <!-- Profile icon -->
-          <a href="cinemarvel_profile.html">
+          <a href="#">
             <img class="rounded-circle ms-3" src="assets/cinemarvel_icons/navigation/icons8-test-account-96.png"
               width="45" height="45" alt="Profile icon">
           </a>
@@ -54,10 +54,10 @@
             <a class="nav-link link-light" href="cinemarvel_browse.php">Browse</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link link-light" href="cinemarvel_new_releases.php">New Releases</a>
+            <a class="nav-link link-light" href="#">New Releases</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link link-light" href="cinemarvel_about.php">About Us</a>
+            <a class="nav-link link-light" href="#">About Us</a>
           </li>
         </ul>
       </div>
